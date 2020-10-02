@@ -21,12 +21,13 @@ class ArmyRepository extends ServiceEntityRepository
 
     public function findEnemy($id, $gameId, $orderBy): ?Army
     {
-
         $query = $this->createQueryBuilder('a')
             ->andWhere('a.id != :id')
             ->setParameter('id', $id)
             ->andWhere('a.game = :game')
-            ->setParameter('game', $gameId);
+            ->setParameter('game', $gameId)
+            ->andWhere('a.defeated = :defeated')
+            ->setParameter('defeated', 0);
 
         if(count($orderBy) > 1){
             $query->orderBy($orderBy[0], $orderBy[1]);

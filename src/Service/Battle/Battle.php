@@ -30,10 +30,18 @@ class Battle implements BattleInterface
 
         $damage = $this->damage($attacker->getUnits(), $enemy->getUnits());
 
+        var_dump($damage);
+
         $attacker->setUnits($damage[0]);
+        if(!$damage[0]){
+            $attacker->setDefeated(true);
+        }
         $this->entityManager->persist($attacker);
 
         $enemy->setUnits($damage[1]);
+        if(!$damage[1]){
+            $enemy->setDefeated(true);
+        }
         $this->entityManager->persist($enemy);
 
         $this->entityManager->flush();

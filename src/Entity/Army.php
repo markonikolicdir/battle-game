@@ -23,7 +23,7 @@ class Army
     private $name;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="float", scale=1)
      */
     private $units;
 
@@ -37,6 +37,11 @@ class Army
      * @ORM\JoinColumn(nullable=false)
      */
     private $game;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default" = false})
+     */
+    private $defeated = false;
 
     public function getId(): ?int
     {
@@ -87,6 +92,18 @@ class Army
     public function setGame(?Game $game): self
     {
         $this->game = $game;
+
+        return $this;
+    }
+
+    public function getDefeated(): ?bool
+    {
+        return $this->defeated;
+    }
+
+    public function setDefeated(bool $defeated): self
+    {
+        $this->defeated = $defeated;
 
         return $this;
     }
