@@ -29,9 +29,15 @@ class Game
      */
     private $armies;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BattleLog::class, mappedBy="game")
+     */
+    private $battleLogs;
+
     public function __construct()
     {
         $this->armies = new ArrayCollection();
+        $this->battleLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,6 +82,37 @@ class Game
             // set the owning side to null (unless already changed)
             if ($army->getGame() === $this) {
                 $army->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BattleLog[]
+     */
+    public function getBattleLogs(): Collection
+    {
+        return $this->battleLogs;
+    }
+
+    public function addBattleLog(BattleLog $battleLog): self
+    {
+        if (!$this->battleLogs->contains($battleLog)) {
+            $this->battleLogs[] = $battleLog;
+            $battleLog->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBattleLog(BattleLog $battleLog): self
+    {
+        if ($this->battleLogs->contains($battleLog)) {
+            $this->battleLogs->removeElement($battleLog);
+            // set the owning side to null (unless already changed)
+            if ($battleLog->getGame() === $this) {
+                $battleLog->setGame(null);
             }
         }
 

@@ -4,6 +4,7 @@
 namespace App\Service\Battle;
 
 use App\Entity\Army;
+use App\Entity\BattleLog;
 use App\Repository\ArmyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -25,12 +26,20 @@ class Battle implements BattleInterface
         $gameId = $attacker->getGame()->getId();
 
         $orderBy = $this->strategy($attacker->getStrategy());
-
         $enemy = $repo->findEnemy($id, $gameId, $orderBy);
 
-        $damage = $this->damage($attacker->getUnits(), $enemy->getUnits());
+        /**
+         * Save Battle Log Units Before demage calculation
+         */
+        $battleLog = new BattleLog();
+        $battleLog->setGame($attacker->getGame());
+        $battleLog->setAttacker($attacker);
+        $battleLog->setAttackerUnits($attacker->getUnits());
+        $battleLog->setEnemyUnits($enemy->getUnits());
+        $battleLog->setEnemy($enemy);
+        $this->entityManager->persist($battleLog);
 
-        var_dump($damage);
+        $damage = $this->damage($attacker->getUnits(), $enemy->getUnits());
 
         $attacker->setUnits($damage[0]);
         if(!$damage[0]){
@@ -81,17 +90,21 @@ class Battle implements BattleInterface
 
     private function damage($attackerUnits, $enemyUnits)
     {
+        $damage = 0;
         /**
          * Attack damage
          * - The army always does 0.5 damage per unit, when an attack is successful.
          * If there is only one unit left, the damage is 1.
          */
-        if($this->attackChance($attackerUnits) && $attackerUnits > 1) {
-            $damage = $attackerUnits * 0.5;
+        if($attackerUnits > 1){
+            if($this->attackChance($attackerUnits)) {
+                $damage = $attackerUnits * 0.5;
+            }
         } else {
             $damage = 1;
         }
         $attackerUnits -= $damage;
+        $attackerUnits = $attackerUnits > 0 ? $attackerUnits : 0;
 
         /**
          * Received damage
@@ -99,6 +112,7 @@ class Battle implements BattleInterface
          * one unit is removed from the attacked army.
          */
         $enemyUnits -= floor($damage);
+        $enemyUnits = $enemyUnits > 0 ? $enemyUnits : 0;
 
         return array($attackerUnits, $enemyUnits);
     }
