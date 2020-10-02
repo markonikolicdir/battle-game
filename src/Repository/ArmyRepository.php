@@ -19,6 +19,26 @@ class ArmyRepository extends ServiceEntityRepository
         parent::__construct($registry, Army::class);
     }
 
+    public function findEnemy($id, $gameId, $orderBy): ?Army
+    {
+
+        $query = $this->createQueryBuilder('a')
+            ->andWhere('a.id != :id')
+            ->setParameter('id', $id)
+            ->andWhere('a.game = :game')
+            ->setParameter('game', $gameId);
+
+        if(count($orderBy) > 1){
+            $query->orderBy($orderBy[0], $orderBy[1]);
+        }else{
+            $query->orderBy($orderBy[0]);
+        }
+
+        return $query->getQuery()
+            ->setMaxResults(1)
+            ->getResult()[0];
+    }
+
     // /**
     //  * @return Army[] Returns an array of Army objects
     //  */
