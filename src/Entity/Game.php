@@ -34,6 +34,11 @@ class Game
      */
     private $battleLogs;
 
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $orderArmies = [];
+
     public function __construct()
     {
         $this->armies = new ArrayCollection();
@@ -115,6 +120,18 @@ class Game
                 $battleLog->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOrderArmies(): ?array
+    {
+        return $this->orderArmies;
+    }
+
+    public function setOrderArmies(?array $orderArmies): self
+    {
+        $this->orderArmies = $orderArmies;
 
         return $this;
     }

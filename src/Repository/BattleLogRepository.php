@@ -19,6 +19,16 @@ class BattleLogRepository extends ServiceEntityRepository
         parent::__construct($registry, BattleLog::class);
     }
 
+    public function countBattleLogByGame($gameId)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.game = :game')
+            ->setParameter('game', $gameId)
+            ->select('COUNT(b.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     // /**
     //  * @return BattleLog[] Returns an array of BattleLog objects
     //  */
