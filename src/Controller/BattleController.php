@@ -19,6 +19,9 @@ class BattleController extends AbstractController
      */
     private $battle;
 
+    /**
+     * @var int
+     */
     private $turns;
 
     /**
@@ -60,6 +63,7 @@ class BattleController extends AbstractController
         }
 
         if($numberOfArmies - count($this->arrayDefeated) == 1){
+            $this->turns = $game->getTurns();
             return 0;
         } else {
             $turns = $game->getTurns()+1;
