@@ -41,14 +41,14 @@ class Game
     private $orderArmies = [];
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default" = false})
      */
-    private $status;
+    private $status = false;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default" = 0})
      */
-    private $turns;
+    private $turns = 0;
 
     public function __construct()
     {
