@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\GameRepository;
+use ArrayIterator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -134,5 +135,35 @@ class Game
         $this->orderArmies = $orderArmies;
 
         return $this;
+    }
+
+    /**
+     * ReOrder Armies with array from $orderArmies
+     * If new Army added after game start, id of Army will be on first position
+     */
+    public function sortArmies(): \ArrayIterator
+    {
+        // get reorder array
+        $newOrderArmies = $this->getOrderArmies();
+
+        $armies = $this->getArmies()->getIterator();
+
+        $armies->uasort(
+            function ($first, $second) use ($newOrderArmies) {
+                foreach ($newOrderArmies as $newId) {
+                    if ($first->getId() === $newId) {
+                        return -1;
+                    }
+                    if ($second->getId() === $newId) {
+                        return 1;
+                    }
+                }
+                // if value is not found in $newOrderArmies
+                return 0;
+            }
+        );
+
+        // return re-ordered Armies
+        return $armies;
     }
 }

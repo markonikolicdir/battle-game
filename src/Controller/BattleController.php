@@ -52,8 +52,11 @@ class BattleController extends AbstractController
             if($numberOfArmies - count($arrayDefeated) == 1)
                 die('Kraj igre iz BattleController');
 
+            /**
+             * If at least 5 Armies added to game
+             */
             if($numberOfArmies >= 5){
-                foreach ($game->getArmies() as $army){
+                foreach ($game->sortArmies() as $army){
                     if($army->getDefeated()){
                         if(!in_array($army->getId(), $arrayDefeated)){
                             array_push($arrayDefeated, $army->getId());
