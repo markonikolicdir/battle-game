@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Army;
 use App\Entity\BattleLog;
 use App\Entity\Game;
-use App\Repository\BattleLogRepository;
+use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +20,34 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/game", name="game", methods={"POST"})
+     * @Route("/", name="listGames", methods={"GET"})
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function index()
+    {
+
+        return $this->render('base.html.twig', [
+            'controller_name' => 'HomePageController',
+        ]);
+
+        /** @var Game $games */
+        $games = $this->entityManager->getRepository(Game::class)->findAll();
+
+        $data = [];
+        foreach ($games as $game){
+            $data [] = [
+                'id'=> $game->getId(),
+                'name'=>$game->getName()
+            ];
+        }
+
+        return $this->json([
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * @Route("/games", name="createGame", methods={"POST"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
@@ -43,7 +70,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/game/{id}/add-army", name="addArmy", methods={"POST"})
+     * @Route("/games/{id}/add-army", name="addArmy", methods={"POST"})
      * @param int $id
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
