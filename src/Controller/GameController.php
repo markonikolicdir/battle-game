@@ -67,7 +67,7 @@ class GameController extends AbstractController
 
         return $this->json([
             'id' => $game->getId(),
-            'message' => 'Successfully created new game:' .$name,
+            'name' => $name
         ]);
     }
 

@@ -51,11 +51,11 @@ export default {
     },
     createGame(){
       axios.post('/games', this.game)
-          .then(
-          response => (
-              this.getGames(),
-                  this.game.name = ''
-          )).catch(e => (this.error(e)))
+          .then((response) => {
+            this.games.push(response.data)
+            this.game.name = ''
+          })
+          .catch(e => (this.error(e)))
     }
   }
 }
