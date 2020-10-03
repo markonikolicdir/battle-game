@@ -40,32 +40,15 @@ class ArmyRepository extends ServiceEntityRepository
             ->getResult()[0];
     }
 
-    // /**
-    //  * @return Army[] Returns an array of Army objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findGameWinner($gameId)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('a.game = :game')
+            ->setParameter('game', $gameId)
+            ->andWhere('a.defeated = :defeated')
+            ->setParameter('defeated', 0)
+            ->select('COUNT(a.id)')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getSingleScalarResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Army
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

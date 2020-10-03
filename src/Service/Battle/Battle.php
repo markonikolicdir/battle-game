@@ -25,6 +25,12 @@ class Battle implements BattleInterface
         $attacker = $repo->find($id);
         $gameId = $attacker->getGame()->getId();
 
+        $winner = $repo->findGameWinner($gameId);
+
+        if($winner == 1){
+            die('Kraj igre iz Battle');
+        }
+
         $orderBy = $this->strategy($attacker->getStrategy());
         $enemy = $repo->findEnemy($id, $gameId, $orderBy);
 
