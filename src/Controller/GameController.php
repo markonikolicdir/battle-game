@@ -20,16 +20,20 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/", name="listGames", methods={"GET"})
+     * @Route("/", name="homepage", methods={"GET"})
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function index()
     {
+        return $this->render('base.html.twig');
+    }
 
-        return $this->render('base.html.twig', [
-            'controller_name' => 'HomePageController',
-        ]);
-
+    /**
+     * @Route("/games", name="listGames", methods={"GET"})
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function list()
+    {
         /** @var Game $games */
         $games = $this->entityManager->getRepository(Game::class)->findAll();
 
@@ -41,9 +45,7 @@ class GameController extends AbstractController
             ];
         }
 
-        return $this->json([
-            'data' => $data,
-        ]);
+        return $this->json($data);
     }
 
     /**

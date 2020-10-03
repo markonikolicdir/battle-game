@@ -10,7 +10,7 @@ import './styles/app.css';
 
 import Vue from 'vue';
 
-import Game from './components/Game';
+import Games from './components/Games';
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
@@ -19,5 +19,5 @@ console.log('Hello Webpack Encore! Edit me in assets/app.js');
 
 new Vue({
     el: '#app',
-    components: {Game}
+    components: {Games}
 });
