@@ -40,6 +40,16 @@ class Game
      */
     private $orderArmies = [];
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $turns;
+
     public function __construct()
     {
         $this->armies = new ArrayCollection();
@@ -165,5 +175,29 @@ class Game
 
         // return re-ordered Armies
         return $armies;
+    }
+
+    public function getStatus(): ?bool
+    {
+        return $this->status;
+    }
+
+    public function setStatus(bool $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTurns(): ?int
+    {
+        return $this->turns;
+    }
+
+    public function setTurns(int $turns): self
+    {
+        $this->turns = $turns;
+
+        return $this;
     }
 }
