@@ -16,13 +16,57 @@ class BattleController extends AbstractController
      * @param Battle $battle
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function run(int $armyId, Battle $battle)
+    public function battle(int $armyId, Battle $battle)
     {
-
         $battle->battle($armyId);
 
         return $this->json([
             'message' => 'Run button'
+        ]);
+    }
+
+    /**
+     * @Route("/turn/{gameId}", name="turn")
+     * @param int $gameId
+     * @param Battle $battle
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function turn(int $gameId, Battle $battle)
+    {
+        $arrayDefeated = [];
+
+        /** @var Game $game */
+        $game = $this->getDoctrine()->getManager()->find(Game::class, $gameId);
+        if (null == $game) {
+            return $this->json([
+                'message' => 'Game does not exists!'
+            ]);
+        }
+
+        $numberOfArmies = count($game->getArmies());
+
+        if($numberOfArmies - count($arrayDefeated) == 1)
+            return $this->json([
+                'message' => 'End of the game in Battle Controller'
+            ]);
+
+        /**
+         * If at least 5 Armies added to game
+         */
+        if($numberOfArmies >= 5){
+            foreach ($game->sortArmies() as $army){
+                if($army->getDefeated()){
+                    if(!in_array($army->getId(), $arrayDefeated)){
+                        array_push($arrayDefeated, $army->getId());
+                    }
+                } else {
+                    $battle->battle($army->getId());
+                }
+            }
+        }
+
+        return $this->json([
+            'message' => 'One Turn finished'
         ]);
     }
 
@@ -32,9 +76,8 @@ class BattleController extends AbstractController
      * @param Battle $battle
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function autorun(int $gameId, Battle $battle)
+    public function autorunTurns(int $gameId, Battle $battle)
     {
-
         $arrayDefeated = [];
 
         while(1)
@@ -50,7 +93,9 @@ class BattleController extends AbstractController
             $numberOfArmies = count($game->getArmies());
 
             if($numberOfArmies - count($arrayDefeated) == 1)
-                die('Kraj igre iz BattleController');
+                return $this->json([
+                    'message' => 'End of the game in Battle Controller'
+                ]);
 
             /**
              * If at least 5 Armies added to game
@@ -67,9 +112,5 @@ class BattleController extends AbstractController
                 }
             }
         }
-
-        return $this->json([
-            'message' => 'Autorun button'
-        ]);
     }
 }
