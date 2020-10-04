@@ -70,16 +70,6 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/games/{id}/army", name="army", methods={"GET"})
-     * @param int $id
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function army(int $id)
-    {
-        return $this->render('game/army.html.twig');
-    }
-
-    /**
      * @Route("/games/{id}/add-army", name="addArmy", methods={"POST"})
      * @param int $id
      * @param Request $request

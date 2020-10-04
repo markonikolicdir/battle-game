@@ -24,6 +24,12 @@
         <tr v-for="game in games">
           <td>{{ game.name }}</td>
           <td>{{ game.id }}</td>
+          <td>
+            <router-link to="/games">Go to Bar</router-link>
+          </td>
+          <td>
+            <router-link :to="{ name: 'add-army', params: { id: 1 }}">Add Army</router-link>
+          </td>
         </tr>
         </tbody>
       </table>

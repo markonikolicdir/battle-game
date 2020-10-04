@@ -1,25 +1,22 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
-import Vue from 'vue';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-import Games from './components/Games';
+const routes = [
+    { path: '/', component: require('./components/Games.vue').default },
+    { path: '/games/:gameId', component: require('./components/Army.vue').default, name: 'add-army' },
+]
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
-// import $ from 'jquery';
+const router = new VueRouter({
+    routes
+})
 
-console.log('Hello Webpack Encore! Edit me in assets/app.js');
+// VueRouter init
+Vue.use(VueRouter)
 
-new Vue({
-    el: '#app',
-    components: {Games}
-});
+const app = new Vue({
+    router
+}).$mount('#app')
