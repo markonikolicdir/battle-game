@@ -16,9 +16,9 @@
           <div class="form-group">
             <label for="armystrategy">Strategy:</label>
             <select class="form-control" id="armystrategy" v-model="addArmy.strategy">
-              <option>RANDOM</option>
-              <option>WEAKEST</option>
-              <option>STRONGEST</option>
+              <option>Random</option>
+              <option>Weakest</option>
+              <option>Strongest</option>
             </select>
           </div>
           <div class="form-group">
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
   name: "Army",
   data() {
@@ -40,7 +40,7 @@ export default {
       addArmy:{
         name:null,
         units:0,
-        strategy:'RANDOM'
+        strategy:'Random'
       }
     }
   },
