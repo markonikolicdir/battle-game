@@ -48,6 +48,8 @@ export default {
   },
   mounted() {
     this.id = this.$route.params.gameId
+
+    console.log(this.id)
   },
   methods:{
     addAnArmy(){

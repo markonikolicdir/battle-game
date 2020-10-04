@@ -28,7 +28,7 @@
             <router-link to="/games">Go to Bar</router-link>
           </td>
           <td>
-            <router-link :to="{ name: 'add-army', params: { id: 1 }}">Add Army</router-link>
+            <router-link :to="{ name: 'add-army', params: { gameId: game.id }}">Add Army</router-link>
           </td>
         </tr>
         </tbody>
