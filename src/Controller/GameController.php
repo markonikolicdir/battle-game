@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Army;
 use App\Entity\BattleLog;
 use App\Entity\Game;
-use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,11 +20,10 @@ class GameController extends AbstractController
 
     /**
      * @Route("/", name="homepage", methods={"GET"})
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function index()
     {
-        return $this->render('base.html.twig');
+        return $this->render('game/index.html.twig');
     }
 
     /**
@@ -69,6 +67,16 @@ class GameController extends AbstractController
             'id' => $game->getId(),
             'name' => $name
         ]);
+    }
+
+    /**
+     * @Route("/games/{id}/army", name="army", methods={"GET"})
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function army(int $id)
+    {
+        return $this->render('game/army.html.twig');
     }
 
     /**

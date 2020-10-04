@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+{#    {{ encore_entry_link_tags('army') }}#}
+{% endblock %}
+
+{% block body %}
+    <div id="army">
+        <Army />
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('army') }}
+{% endblock %}

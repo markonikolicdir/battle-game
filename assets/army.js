@@ -6,20 +6,14 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
 import Vue from 'vue';
 
-import Games from './components/Games';
-
-// Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
-// import $ from 'jquery';
-
-console.log('Hello Webpack Encore! Edit me in assets/app.js');
+import Army from './components/Army';
 
 new Vue({
-    el: '#app',
-    components: {Games}
+    el: '#army',
+    components: {Army}
 });

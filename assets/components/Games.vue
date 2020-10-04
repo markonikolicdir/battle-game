@@ -3,8 +3,10 @@
     <div class="container align-items-center">
       <h1 class="text-center">Battle Simulator - Games</h1>
       <form>
-        <input type="text" v-model="game.name">
-        <button @click.prevent="createGame">Create Game</button>
+        <div class="input-group">
+          <input type="text" class="form-control col-3 mr-1" v-model="game.name">
+          <button type="button" class="btn btn-secondary" @click.prevent="createGame">Create Game</button>
+        </div>
       </form>
     </div>
     <div class="container">
@@ -14,6 +16,8 @@
         <tr>
           <th>Name</th>
           <th>Action</th>
+          <th>Add Army</th>
+          <th>Battle</th>
         </tr>
         </thead>
         <tbody>
