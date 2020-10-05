@@ -29,6 +29,18 @@ class BattleLogRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function findBattleLogByGame($gameId)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.game = :game')
+            ->setParameter('game', $gameId)
+            ->leftJoin('b.attacker', 'a')
+            ->leftJoin('b.enemy', 'e')
+            ->select('a.name as attacker, e.name as enemy, b.attacker_units', 'b.enemy_units')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return BattleLog[] Returns an array of BattleLog objects
     //  */

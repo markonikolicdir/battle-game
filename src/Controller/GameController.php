@@ -132,7 +132,7 @@ class GameController extends AbstractController
      */
     public function listArmies(int $id)
     {
-        /** @var Game $armies */
+        /** @var Army $data */
         $data = $this->entityManager->getRepository(Army::class)->findArmiesByGame($id);
 
         return $this->json($data);

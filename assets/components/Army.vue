@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="row"></div>
+    <div class="row">
+      <router-link :to="{ name: 'home' }">Games</router-link>
+      <router-link :to="{ name: 'battle', params: { gameId: id }}">Battle</router-link>
+    </div>
     <div class="row">
       <div class="col-4 col-sm-4 col-lg-4">
         <h3 class="border-bottom">Add new army</h3>
@@ -22,7 +25,7 @@
             </select>
           </div>
           <div class="form-group">
-            <button type="button" class="btn btn-secondary" @click.prevent="addArmy()">Add new Army</button>
+            <button type="button" class="btn btn-secondary" @click.prevent="addArmy()">Add Army</button>
           </div>
         </form>
       </div>

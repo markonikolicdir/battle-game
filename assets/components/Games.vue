@@ -25,10 +25,10 @@
           <td>{{ game.name }}</td>
           <td>{{ game.id }}</td>
           <td>
-            <router-link to="/games">Go to Bar</router-link>
+            <router-link :to="{ name: 'add-army', params: { gameId: game.id }}">Add Army</router-link>
           </td>
           <td>
-            <router-link :to="{ name: 'add-army', params: { gameId: game.id }}">Add Army</router-link>
+            <router-link :to="{ name: 'battle', params: { gameId: game.id }}">Battle</router-link>
           </td>
         </tr>
         </tbody>

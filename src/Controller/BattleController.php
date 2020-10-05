@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 
+use App\Entity\BattleLog;
 use App\Entity\Game;
+use App\Repository\BattleLogRepository;
 use App\Service\Battle\Battle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -79,7 +81,7 @@ class BattleController extends AbstractController
     }
 
     /**
-     * @Route("/turn/{gameId}", name="turn")
+     * @Route("/games/{gameId}/turn", name="turn", methods={"GET"})
      * @param int $gameId
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
@@ -93,7 +95,7 @@ class BattleController extends AbstractController
     }
 
     /**
-     * @Route("/autorun/{gameId}", name="autorun")
+     * @Route("/games/{gameId}/autorun", name="autorun", methods={"GET"})
      * @param int $gameId
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
@@ -109,5 +111,17 @@ class BattleController extends AbstractController
                 ]);
             }
         }
+    }
+
+    /**
+     * @Route("/games/{id}/battles", name="listBattles", methods={"GET"})
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function listBattles(int $id)
+    {
+        /** @var BattleLog $data */
+        $data = $this->entityManager->getRepository(BattleLog::class)->findBattleLogByGame($id);
+
+        return $this->json($data);
     }
 }

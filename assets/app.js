@@ -6,8 +6,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 const routes = [
-    { path: '/', component: require('./components/Games.vue').default },
+    { path: '/', component: require('./components/Games.vue').default, name: 'home' },
     { path: '/games/:gameId', component: require('./components/Army.vue').default, name: 'add-army' },
+    { path: '/games/:gameId/battle', component: require('./components/Battle.vue').default, name: 'battle' },
 ]
 
 const router = new VueRouter({
