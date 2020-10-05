@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Army;
 use App\Entity\BattleLog;
 use App\Entity\Game;
 use App\Service\Battle\Battle;
@@ -24,6 +25,11 @@ class BattleController extends AbstractController
      * @var int
      */
     private $turns;
+
+    /**
+     * @var null|Army
+     */
+    private $winner = null;
 
     /**
      * BattleController constructor.
@@ -64,6 +70,8 @@ class BattleController extends AbstractController
         }
 
         if($numberOfArmies - count($this->arrayDefeated) == 1){
+            $repo = $manager->getRepository(Army::class);
+            $this->winner = $repo->findOneBy(['defeated'=>0, 'game'=>$gameId]);
             $this->turns = $game->getTurns();
             return 0;
         } else {
@@ -89,6 +97,7 @@ class BattleController extends AbstractController
         $turns = $this->battle($gameId);
 
         return $this->json([
+            'winner' => !is_null($this->winner) ? $this->winner->getName() : '',
             'turns' => !$turns ? $this->turns : $turns,
             'message' => !$turns ? 'Game finished after ' . $this->turns . ' turns' : 'Turn ' . $turns . ' finished'
         ]);
@@ -107,6 +116,7 @@ class BattleController extends AbstractController
 
             if(!$turns){
                 return $this->json([
+                    'winner' => !is_null($this->winner) ? $this->winner->getName() : '',
                     'turns' => $this->turns,
                     'message' => 'Game finished after ' . $this->turns . ' turns'
                 ]);

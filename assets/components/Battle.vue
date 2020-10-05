@@ -13,6 +13,7 @@
       </div>
       <div class="col-4">
         <p>Nuber of Turns: {{turns}}</p>
+        <p>Winner: <span class="text-success">{{winner}}</span></p>
         <p>Message: {{message}}</p>
       </div>
     </div>
@@ -77,7 +78,8 @@ export default {
       armies: [],
       battles: [],
       turns: 0,
-      message: ''
+      message: '',
+      winner: null
     }
   },
   computed: {
@@ -95,6 +97,7 @@ export default {
 
             this.turns = response.data.turns
             this.message = response.data.message
+            this.winner = response.data.winner
 
             this.listArmies()
             this.listBattles()
@@ -107,6 +110,7 @@ export default {
 
             this.turns = response.data.turns
             this.message = response.data.message
+            this.winner = response.data.winner
 
             this.listArmies()
             this.listBattles()
