@@ -17,6 +17,7 @@
         <tr>
           <th>Name</th>
           <th>Status</th>
+          <th>Turns</th>
           <th>Add Army</th>
           <th>Battle</th>
         </tr>
@@ -25,9 +26,10 @@
         <tr v-for="game in games">
           <td>{{ game.name }}</td>
           <td>
-            <span v-if="game.status">Active</span>
+            <span class="text-success" v-if="game.status">Active</span>
             <span v-else>Inactive</span>
           </td>
+          <th>{{ game.turns }}</th>
           <td>
             <router-link :to="{ name: 'add-army', params: { gameId: game.id }}">Add Army</router-link>
           </td>

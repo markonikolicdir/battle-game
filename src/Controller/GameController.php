@@ -41,8 +41,9 @@ class GameController extends AbstractController
         foreach ($games as $game){
             $data [] = [
                 'id'=> $game->getId(),
+                'name'=>$game->getName(),
                 'status' => $game->getStatus(),
-                'name'=>$game->getName()
+                'turns' => $game->getTurns()
             ];
         }
 
