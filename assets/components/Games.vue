@@ -69,16 +69,12 @@ export default {
     createGame(){
       axios.post('/games', this.game)
           .then((response) => {
-
-            if (typeof response.data.error === 'undefined') {
               this.games.push(response.data)
               this.game.name = ''
-            } else {
-              this.message = response.data.error;
-            }
-
           })
-          .catch(e => (this.error(e)))
+          .catch((error) => {
+            this.message = error.response.data.errors.join(',')
+          });
     }
   }
 }

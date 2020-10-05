@@ -86,19 +86,15 @@ export default {
     addArmy(){
       axios.post(`/games/${this.id}/add-army`,this.army)
           .then((response) => {
-
-            if (typeof response.data.error === 'undefined') {
               this.armies.push(response.data);
-
               this.army.name = null;
               this.army.units = 0;
               this.army.strategy = 'Random';
               this.army.defeated = 0;
-            } else {
-              this.message = response.data.error;
-            }
-
           })
+          .catch((error) => {
+            this.message = error.response.data.errors.join(',')
+          });
     },
     listArmies(){
       axios.get(`/games/${this.id}/armies`)

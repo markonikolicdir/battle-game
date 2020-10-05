@@ -2,17 +2,19 @@
 
 namespace App\Controller;
 
+use App\Api\ApiProblem;
+use App\Api\ApiProblemException;
 use App\Entity\Army;
 use App\Entity\BattleLog;
 use App\Entity\Game;
 use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class GameController extends AbstractController
+class GameController extends BaseController
 {
     private $entityManager;
     public function __construct(EntityManagerInterface $entityManager)
@@ -47,7 +49,7 @@ class GameController extends AbstractController
             ];
         }
 
-        return $this->json($data);
+        return $this->json($data, Response::HTTP_OK);
     }
 
     /**
@@ -60,6 +62,12 @@ class GameController extends AbstractController
     {
         $body = json_decode($request->getContent(), true);
 
+        if (null==$body) {
+            $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_INVALID_BODY_FORMAT);
+            $apiProblem->set('errors', ['Problem with Body JSON']);
+            throw new ApiProblemException($apiProblem);
+        }
+
         $name = $body["name"];
 
         $game = new Game();
@@ -71,11 +79,8 @@ class GameController extends AbstractController
             foreach ($errors as $violation) {
                 $messages[] = $violation->getMessage();
             }
-            $errorsString = implode(', ', $messages);
 
-            return $this->json([
-                'error' => $errorsString
-            ]);
+            $this->throwValidationException($messages);
         }
 
         $this->entityManager->persist($game);
@@ -84,7 +89,7 @@ class GameController extends AbstractController
         return $this->json([
             'id' => $game->getId(),
             'name' => $name
-        ]);
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -99,12 +104,16 @@ class GameController extends AbstractController
         /** @var Game $game */
         $game = $this->entityManager->find(Game::class, $id);
         if (null == $game) {
-            return $this->json([
-                'error' => 'Game does not exists!'
-            ]);
+            $this->throwValidationException(['Game does not exists!']);
         }
 
         $body = json_decode($request->getContent(), true);
+
+        if (null==$body) {
+            $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_INVALID_BODY_FORMAT);
+            $apiProblem->set('errors', ['Problem with Body JSON']);
+            throw new ApiProblemException($apiProblem);
+        }
 
         $name = $body["name"];
         $units = $body["units"];
@@ -123,11 +132,8 @@ class GameController extends AbstractController
             foreach ($errors as $violation) {
                 $messages[] = $violation->getMessage();
             }
-            $errorsString = implode(', ', $messages);
 
-            return $this->json([
-                'error' => $errorsString
-            ]);
+            $this->throwValidationException($messages);
         }
 
         $this->entityManager->persist($army);
@@ -156,7 +162,7 @@ class GameController extends AbstractController
             'name' => $name,
             'units' => $units,
             'strategy' => $strategy
-        ]);
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -168,6 +174,6 @@ class GameController extends AbstractController
         /** @var Army $data */
         $data = $this->entityManager->getRepository(Army::class)->findArmiesByGame($id);
 
-        return $this->json($data);
+        return $this->json($data, Response::HTTP_OK);
     }
 }
