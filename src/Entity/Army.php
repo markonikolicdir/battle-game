@@ -6,6 +6,8 @@ use App\Repository\ArmyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=ArmyRepository::class)
@@ -21,16 +23,26 @@ class Army
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Army must have a name")
      */
     private $name;
 
     /**
      * @ORM\Column(type="float", scale=1)
+     * @Assert\Range(
+     *      min = 80,
+     *      max = 100,
+     *      notInRangeMessage = "Armies must have between {{ min }} and {{ max }} units",
+     * )
      */
     private $units;
 
     /**
      * @ORM\Column(type="string", length=9)
+     * @Assert\Choice(
+     *     choices = { "Random", "Weakest", "Strongest" },
+     *     message = "Choose a valid Attack Strategy. Allowed are Random, Weakest, Strongest"
+     * )
      */
     private $strategy;
 

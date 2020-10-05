@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\BattleLog;
 use App\Entity\Game;
-use App\Repository\BattleLogRepository;
 use App\Service\Battle\Battle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;

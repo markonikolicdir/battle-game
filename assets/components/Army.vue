@@ -30,6 +30,7 @@
           </div>
           <div class="form-group">
             <button type="button" class="btn btn-secondary" @click.prevent="addArmy()">Add Army</button>
+            <p>{{message}}</p>
           </div>
         </form>
       </div>
@@ -66,12 +67,13 @@ export default {
     return {
       id: null,
       army:{
-        name:null,
+        name:'',
         units:0,
         strategy:'Random',
         defeated:0
       },
-      armies: []
+      armies: [],
+      message: ''
     }
   },
   computed: {
@@ -84,13 +86,18 @@ export default {
     addArmy(){
       axios.post(`/games/${this.id}/add-army`,this.army)
           .then((response) => {
-            console.log(response)
-            this.armies.push(response.data)
 
-            this.army.name = null
-            this.army.units = 0
-            this.army.strategy = 'Random'
-            this.army.defeated = 0
+            if (typeof response.data.error === 'undefined') {
+              this.armies.push(response.data);
+
+              this.army.name = null;
+              this.army.units = 0;
+              this.army.strategy = 'Random';
+              this.army.defeated = 0;
+            } else {
+              this.message = response.data.error;
+            }
+
           })
     },
     listArmies(){

@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GameController extends AbstractController
 {
@@ -49,9 +50,10 @@ class GameController extends AbstractController
     /**
      * @Route("/games", name="createGame", methods={"POST"})
      * @param Request $request
+     * @param ValidatorInterface $validator
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function createGame(Request $request)
+    public function createGame(Request $request, ValidatorInterface $validator)
     {
         $body = json_decode($request->getContent(), true);
 
@@ -59,6 +61,19 @@ class GameController extends AbstractController
 
         $game = new Game();
         $game->setName($name);
+
+        $errors = $validator->validate($game);
+        if (count($errors) > 0) {
+            $messages = [];
+            foreach ($errors as $violation) {
+                $messages[] = $violation->getMessage();
+            }
+            $errorsString = implode(', ', $messages);
+
+            return $this->json([
+                'error' => $errorsString
+            ]);
+        }
 
         $this->entityManager->persist($game);
         $this->entityManager->flush();
@@ -73,15 +88,16 @@ class GameController extends AbstractController
      * @Route("/games/{id}/add-army", name="addArmy", methods={"POST"})
      * @param int $id
      * @param Request $request
+     * @param ValidatorInterface $validator
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function addArmy(int $id, Request $request)
+    public function addArmy(int $id, Request $request, ValidatorInterface $validator)
     {
         /** @var Game $game */
         $game = $this->entityManager->find(Game::class, $id);
         if (null == $game) {
             return $this->json([
-                'message' => 'Game does not exists!'
+                'error' => 'Game does not exists!'
             ]);
         }
 
@@ -96,6 +112,20 @@ class GameController extends AbstractController
         $army->setUnits($units);
         $army->setStrategy($strategy);
         $army->setGame($game);
+
+        $errors = $validator->validate($army);
+
+        if (count($errors) > 0) {
+            $messages = [];
+            foreach ($errors as $violation) {
+                $messages[] = $violation->getMessage();
+            }
+            $errorsString = implode(', ', $messages);
+
+            return $this->json([
+                'error' => $errorsString
+            ]);
+        }
 
         $this->entityManager->persist($army);
         $this->entityManager->flush();

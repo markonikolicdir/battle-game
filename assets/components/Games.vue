@@ -6,6 +6,7 @@
         <div class="input-group">
           <input type="text" class="form-control col-3 mr-1" v-model="game.name">
           <button type="button" class="btn btn-secondary" @click.prevent="createGame">Create Game</button>
+          <p>{{message}}</p>
         </div>
       </form>
     </div>
@@ -46,7 +47,8 @@ export default {
       games:[],
       game:{
         name:''
-      }
+      },
+      message: ''
     }
   },
   mounted() {
@@ -62,8 +64,14 @@ export default {
     createGame(){
       axios.post('/games', this.game)
           .then((response) => {
-            this.games.push(response.data)
-            this.game.name = ''
+
+            if (typeof response.data.error === 'undefined') {
+              this.games.push(response.data)
+              this.game.name = ''
+            } else {
+              this.message = response.data.error;
+            }
+
           })
           .catch(e => (this.error(e)))
     }
