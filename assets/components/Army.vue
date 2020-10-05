@@ -1,11 +1,15 @@
 <template>
   <div class="container">
+    <h1 class="text-center">Battle Simulator - Army</h1>
     <div class="row">
-      <router-link :to="{ name: 'home' }">Games</router-link>
-      <router-link :to="{ name: 'battle', params: { gameId: id }}">Battle</router-link>
+      <div class="col-4">
+        Pages:
+        <router-link class="m-2" :to="{ name: 'home' }">Games</router-link>
+        <router-link :to="{ name: 'battle', params: { gameId: id }}">Battle</router-link>
+      </div>
     </div>
     <div class="row">
-      <div class="col-4 col-sm-4 col-lg-4">
+      <div class="col-4">
         <h3 class="border-bottom">Add new army</h3>
         <form class="border-danger">
           <div class="form-group">
@@ -29,7 +33,7 @@
           </div>
         </form>
       </div>
-      <div col-6 col-sm-6 col-lg-6>
+      <div class="col-5 offset-1">
         <h3 class="border-bottom">List of armies</h3>
         <table class="table table-striped">
           <thead>

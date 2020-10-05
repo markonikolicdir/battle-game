@@ -1,19 +1,23 @@
 <template>
   <div class="container">
+    <h1 class="text-center">Battle Simulator - Battles</h1>
     <div class="row">
-      <router-link :to="{ name: 'home' }">Games</router-link>
-      <router-link :to="{ name: 'add-army', params: { gameId: id }}">Add Army</router-link>
-    </div>
-    <div>
-      <button type="button" class="btn btn-secondary m-2" @click.prevent="turn()">Turn</button>
-      <button type="button" class="btn btn-secondary" @click.prevent="autorun()">Autorun</button>
-    </div>
-    <div class="row">
-      <div class="row">
+      <div class="col-4">
+        Pages:
+        <router-link class="m-2" :to="{ name: 'home' }">Games</router-link>
+        <router-link :to="{ name: 'add-army', params: { gameId: id }}">Add Army</router-link>
+      </div>
+      <div class="col-4">
+        <button type="button" class="btn btn-secondary m-2" @click.prevent="turn()">Turn</button>
+        <button type="button" class="btn btn-secondary" @click.prevent="autorun()">Autorun</button>
+      </div>
+      <div class="col-4">
         <p>Nuber of Turns: {{turns}}</p>
         <p>Message: {{message}}</p>
       </div>
-      <div class="col-5 offset-2">
+    </div>
+    <div class="row">
+      <div class="col-5">
         <h3 class="border-bottom">Armies with their points</h3>
         <table class="table table-striped">
           <thead>
@@ -34,7 +38,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-5">
+      <div class="col-5 offset-1">
         <h3 class="border-bottom">Battle log before every turn</h3>
         <table class="table table-striped">
           <thead>
