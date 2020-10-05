@@ -20,7 +20,7 @@ class Battle implements BattleInterface
         /**
          * At most 5 different battles(Games) active
          */
-        if($this->countActiveGames() < 6){
+        if($this->countActiveGames() > 5){
             die('Only 5 different battles(Games) can be active');
         }
     }
