@@ -15,15 +15,16 @@ class ApiExceptionSubscriber implements EventSubscriberInterface
 
         if ($exception instanceof ApiProblemException) {
             $apiProblem = $exception->getApiProblem();
+
+            $response = new JsonResponse(
+                $apiProblem->toArray(),
+                $apiProblem->getStatusCode()
+            );
+
+            $response->headers->set('Content-Type', 'application/problem+json');
+            $event->setResponse($response);
         }
 
-        $response = new JsonResponse(
-            $apiProblem->toArray(),
-            $apiProblem->getStatusCode()
-        );
-
-        $response->headers->set('Content-Type', 'application/problem+json');
-        $event->setResponse($response);
     }
 
     public static function getSubscribedEvents()

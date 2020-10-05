@@ -1,16 +1,18 @@
 <template>
-  <div class="align-content-center">
-    <div class="container align-items-center">
-      <h1 class="text-center">Battle Simulator - Games</h1>
-      <form>
+  <div class="container">
+    <div class="row">
+        <h2 class="text-center">Battle Simulator - Games</h2>
+    </div>
+    <div class="row">
+      <form class="col-12">
         <div class="input-group">
-          <input type="text" class="form-control col-3 mr-1" v-model="game.name">
+          <input type="text" class="form-control col-4 mr-1" v-model="game.name">
           <button type="button" class="btn btn-secondary" @click.prevent="createGame">Create Game</button>
-          <p>{{message}}</p>
+          <p class="m-2"> <span class="text-warning">{{message}} </span></p>
         </div>
       </form>
     </div>
-    <div class="container">
+    <div class="row">
       <h2>List of games</h2>
       <table class="table table-striped">
         <thead>

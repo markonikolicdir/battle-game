@@ -7,6 +7,7 @@ use App\Api\ApiProblemException;
 use App\Entity\Army;
 use App\Entity\BattleLog;
 use App\Entity\Game;
+use App\Repository\ArmyRepository;
 use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -173,6 +174,32 @@ class GameController extends BaseController
     {
         /** @var Army $data */
         $data = $this->entityManager->getRepository(Army::class)->findArmiesByGame($id);
+
+        return $this->json($data, Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/games/{id}", name="getGame", methods={"GET"})
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getGame(int $id)
+    {
+        /** @var Game $game */
+        $game = $this->entityManager->find(Game::class, $id);
+        if (null == $game) {
+            $this->throwValidationException(['Game does not exists!']);
+        }
+
+        /** @var ArmyRepository $repo */
+        $repo = $this->entityManager->getRepository(Army::class);
+        $winner = $repo->findOneBy(['defeated'=>0, 'game'=> $id]);
+
+        $data = [
+            'name' => $game->getName(),
+            'status' => $game->getStatus(),
+            'turns' => $game->getTurns(),
+            'winner' => !is_null($winner) ? $winner->getName() : ''
+        ];
 
         return $this->json($data, Response::HTTP_OK);
     }

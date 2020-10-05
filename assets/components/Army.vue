@@ -1,12 +1,39 @@
 <template>
   <div class="container">
-    <h1 class="text-center">Battle Simulator - Army</h1>
+
     <div class="row">
-      <div class="col-4">
+      <div class="col-6">
+        <h2 class="text-center">Battle Simulator - Army</h2>
+      </div>
+      <div class="col-6">
         Pages:
         <router-link class="m-2" :to="{ name: 'home' }">Games</router-link>
         <router-link :to="{ name: 'battle', params: { gameId: id }}">Battle</router-link>
       </div>
+    </div>
+    <div class="row">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Game</th>
+          <th>Status</th>
+          <th>Turns</th>
+          <th>Winner</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{game.name}}</td>
+          <td>
+            <span class="text-success" v-if="game.status">Active</span>
+            <span v-else>Inactive</span>
+          </td>
+          <td>{{game.turns}}</td>
+          <td><span class="text-success">{{game.winner}}</span></td>
+        </tr>
+        </tbody>
+      </table>
+      <p>Message: <span class="text-warning"> {{message}} </span></p>
     </div>
     <div class="row">
       <div class="col-4">
@@ -69,6 +96,11 @@ export default {
   data() {
     return {
       id: null,
+      game: {
+        name: '',
+        turns: 0,
+        winner: null
+      },
       army:{
         name:'',
         units:0,
@@ -82,10 +114,19 @@ export default {
   computed: {
   },
   mounted() {
-    this.id = this.$route.params.gameId,
+    this.id = this.$route.params.gameId
+    this.getGame()
     this.listArmies()
   },
   methods:{
+    getGame(){
+      axios.get(`/games/${this.id}`)
+          .then((response) => {
+            this.game.name = response.data.name
+            this.game.turns = response.data.turns
+            this.game.winner = response.data.winner
+          })
+    },
     addArmy(){
       axios.post(`/games/${this.id}/add-army`,this.army)
           .then((response) => {
