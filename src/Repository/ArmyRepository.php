@@ -19,6 +19,16 @@ class ArmyRepository extends ServiceEntityRepository
         parent::__construct($registry, Army::class);
     }
 
+    public function findArmiesByGame($gameId)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.game = :game')
+            ->setParameter('game', $gameId)
+            ->select('a.name, a.units, a.strategy', 'a.defeated')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findEnemy($id, $gameId, $orderBy): ?Army
     {
         $query = $this->createQueryBuilder('a')

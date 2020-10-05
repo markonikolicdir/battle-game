@@ -30,7 +30,7 @@ class GameController extends AbstractController
      * @Route("/games", name="listGames", methods={"GET"})
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function list()
+    public function listGames()
     {
         /** @var Game $games */
         $games = $this->entityManager->getRepository(Game::class)->findAll();
@@ -51,7 +51,7 @@ class GameController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function create(Request $request)
+    public function createGame(Request $request)
     {
         $body = json_decode($request->getContent(), true);
 
@@ -77,7 +77,6 @@ class GameController extends AbstractController
      */
     public function addArmy(int $id, Request $request)
     {
-
         /** @var Game $game */
         $game = $this->entityManager->find(Game::class, $id);
         if (null == $game) {
@@ -121,7 +120,21 @@ class GameController extends AbstractController
 
         return $this->json([
             'id' => $army->getId(),
-            'message' => 'Successfully inserted new army:'. $name .' into game:' . $game->getName()
+            'name' => $name,
+            'units' => $units,
+            'strategy' => $strategy
         ]);
+    }
+
+    /**
+     * @Route("/games/{id}/armies", name="listArmies", methods={"GET"})
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function listArmies(int $id)
+    {
+        /** @var Game $armies */
+        $data = $this->entityManager->getRepository(Army::class)->findArmiesByGame($id);
+
+        return $this->json($data);
     }
 }
