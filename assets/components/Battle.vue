@@ -93,20 +93,19 @@ export default {
     turn(){
       axios.get(`/games/${this.id}/turn`)
           .then((response) => {
-            console.log(response)
-
             this.turns = response.data.turns
             this.message = response.data.message
             this.winner = response.data.winner
-
             this.listArmies()
             this.listBattles()
           })
+          .catch((error) => {
+            this.message = error.response.data.errors.join(',')
+          });
     },
     autorun(){
       axios.get(`/games/${this.id}/autorun`)
           .then((response) => {
-            console.log(response)
 
             this.turns = response.data.turns
             this.message = response.data.message
@@ -115,6 +114,9 @@ export default {
             this.listArmies()
             this.listBattles()
           })
+          .catch((error) => {
+            this.message = error.response.data.errors.join(',')
+          });
     },
     listArmies(){
       axios.get(`/games/${this.id}/armies`)

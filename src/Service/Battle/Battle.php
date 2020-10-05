@@ -5,7 +5,6 @@ namespace App\Service\Battle;
 
 use App\Entity\Army;
 use App\Entity\BattleLog;
-use App\Entity\Game;
 use App\Repository\ArmyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -16,18 +15,6 @@ class Battle implements BattleInterface
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-
-        /**
-         * At most 5 different battles(Games) active
-         */
-        if($this->countActiveGames() > 5){
-            die('Only 5 different battles(Games) can be active');
-        }
-    }
-
-    private function countActiveGames()
-    {
-        return $this->entityManager->getRepository(Game::class)->countActiveGames();
     }
 
     public function battle($id)

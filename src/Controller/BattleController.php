@@ -10,7 +10,7 @@ use App\Service\Battle\Battle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BattleController extends AbstractController
+class BattleController extends BaseController
 {
     /**
      * @var array
@@ -44,10 +44,21 @@ class BattleController extends AbstractController
     {
         $manager = $this->getDoctrine()->getManager();
 
+        $countActiveGames = $manager->getRepository(Game::class)->countActiveGames();
+
+        /**
+         * At most 5 different battles(Games) active
+         */
+        if($countActiveGames > 5){
+//            die('Only 5 different battles(Games) can be active');
+            $this->throwValidationException(['Only 5 different battles(Games) can be active!']);
+        }
+
         /** @var Game $game */
         $game = $manager->find(Game::class, $gameId);
         if (null == $game) {
-            die('Game does not exists!');
+//            die('Game does not exists!');
+            $this->throwValidationException(['Game does not exists!']);
         }
 
         $numberOfArmies = count($game->getArmies());
@@ -66,7 +77,8 @@ class BattleController extends AbstractController
                 }
             }
         } else {
-            die('At least 5 Armies needs to be in one game!');
+//            die('At least 5 Armies needs to be in one game!');
+            $this->throwValidationException(['At least 5 Armies needs to be in one game!']);
         }
 
         if($numberOfArmies - count($this->arrayDefeated) == 1){
