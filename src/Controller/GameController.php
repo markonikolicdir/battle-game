@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Army;
 use App\Entity\BattleLog;
 use App\Entity\Game;
+use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,13 +34,14 @@ class GameController extends AbstractController
      */
     public function listGames()
     {
-        /** @var Game $games */
+        /** @var GameRepository $games */
         $games = $this->entityManager->getRepository(Game::class)->findAll();
 
         $data = [];
         foreach ($games as $game){
             $data [] = [
                 'id'=> $game->getId(),
+                'status' => $game->getStatus(),
                 'name'=>$game->getName()
             ];
         }
