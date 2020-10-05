@@ -192,7 +192,11 @@ class GameController extends BaseController
 
         /** @var ArmyRepository $repo */
         $repo = $this->entityManager->getRepository(Army::class);
-        $winner = $repo->findOneBy(['defeated'=>0, 'game'=> $id]);
+
+        $winner = null;
+        if($repo->findGameWinner($id) == 1){
+            $winner = $repo->findOneBy(['defeated'=>0, 'game'=> $id]);
+        }
 
         $data = [
             'name' => $game->getName(),

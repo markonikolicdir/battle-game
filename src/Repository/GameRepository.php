@@ -19,13 +19,4 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-    public function countActiveGames()
-    {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.status = :status')
-            ->setParameter('status', 1)
-            ->select('COUNT(g.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
 }

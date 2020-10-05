@@ -61,4 +61,31 @@ class ArmyRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function countActiveGames()
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.game', 'g')
+
+            ->andWhere('g.status = :status')
+            ->setParameter('status', 1)
+
+            ->andWhere('a.defeated = :defeated')
+            ->setParameter('defeated', 0)
+
+            ->select('COUNT(a.game) AS cnt')
+            ->groupBy('a.game')
+            ->having('cnt > 1')
+            ->getQuery()
+            ->getResult();
+
+        //    SELECT count(a.game_id) cnt
+        //    FROM `army` a
+        //    Left join game g
+        //    ON a.game_id = g.id
+        //    where g.status = 1 And a.defeated = 0
+        //    group by a.game_id
+        //    having cnt > 1
+    }
+
 }

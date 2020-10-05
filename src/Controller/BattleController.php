@@ -6,15 +6,12 @@ namespace App\Controller;
 use App\Entity\Army;
 use App\Entity\BattleLog;
 use App\Entity\Game;
+use App\Repository\ArmyRepository;
 use App\Service\Battle\Battle;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BattleController extends BaseController
 {
-    /**
-     * @var array
-     */
-    private $arrayDefeated = [];
     /**
      * @var Battle
      */
@@ -43,12 +40,14 @@ class BattleController extends BaseController
     {
         $manager = $this->getDoctrine()->getManager();
 
-        $countActiveGames = $manager->getRepository(Game::class)->countActiveGames();
+        /** @var ArmyRepository $repo */
+        $repo = $manager->getRepository(Army::class);
+        $countActiveGames = $repo->countActiveGames();
 
         /**
          * At most 5 different battles(Games) active
          */
-        if($countActiveGames > 5){
+        if(count($countActiveGames) >= 5){
 //            die('Only 5 different battles(Games) can be active');
             $this->throwValidationException(['Only 5 different battles(Games) can be active!']);
         }
@@ -62,14 +61,16 @@ class BattleController extends BaseController
 
         $numberOfArmies = count($game->getArmies());
 
+        $arrayDefeated = [];
+
         /**
          * If at least 5 Armies added to game
          */
         if($numberOfArmies >= 5){
             foreach ($game->sortArmies() as $army){
                 if($army->getDefeated()){
-                    if(!in_array($army->getId(), $this->arrayDefeated)){
-                        array_push($this->arrayDefeated, $army->getId());
+                    if(!in_array($army->getId(), $arrayDefeated)){
+                        array_push($arrayDefeated, $army->getId());
                     }
                 } else {
                     $this->battle->battle($army->getId());
@@ -80,7 +81,7 @@ class BattleController extends BaseController
             $this->throwValidationException(['At least 5 Armies needs to be in one game!']);
         }
 
-        if($numberOfArmies - count($this->arrayDefeated) == 1){
+        if($numberOfArmies - count($arrayDefeated) == 1){
             $repo = $manager->getRepository(Army::class);
             $this->winner = $repo->findOneBy(['defeated'=>0, 'game'=>$gameId]);
             $this->turns = $game->getTurns();
