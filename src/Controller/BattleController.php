@@ -7,7 +7,6 @@ use App\Entity\Army;
 use App\Entity\BattleLog;
 use App\Entity\Game;
 use App\Service\Battle\Battle;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BattleController extends BaseController

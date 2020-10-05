@@ -50,7 +50,10 @@
             <td>{{ army.name }}</td>
             <td>{{ army.units }}</td>
             <td>{{ army.strategy }}</td>
-            <td>{{ army.defeated }}</td>
+            <td>
+              <span class="text-success" v-if="!army.defeated">Active</span>
+              <span class="text-danger" v-else>Defeated</span>
+            </td>
           </tr>
           </tbody>
         </table>

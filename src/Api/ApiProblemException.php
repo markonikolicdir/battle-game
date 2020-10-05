@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zarko
- * Date: 28.9.20.
- * Time: 19.54
- */
+
 declare(strict_types=1);
 
 namespace App\Api;
