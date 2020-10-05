@@ -90,6 +90,7 @@ class BattleController extends AbstractController
         $turns = $this->battle($gameId);
 
         return $this->json([
+            'turns' => !$turns ? $this->turns : $turns,
             'message' => !$turns ? 'Game finished after ' . $this->turns . ' turns' : 'Turn ' . $turns . ' finished'
         ]);
     }
@@ -107,6 +108,7 @@ class BattleController extends AbstractController
 
             if(!$turns){
                 return $this->json([
+                    'turns' => $this->turns,
                     'message' => 'Game finished after ' . $this->turns . ' turns'
                 ]);
             }
@@ -120,7 +122,8 @@ class BattleController extends AbstractController
     public function listBattles(int $id)
     {
         /** @var BattleLog $data */
-        $data = $this->entityManager->getRepository(BattleLog::class)->findBattleLogByGame($id);
+        $manager = $this->getDoctrine()->getManager();
+        $data = $manager->getRepository(BattleLog::class)->findBattleLogByGame($id);
 
         return $this->json($data);
     }

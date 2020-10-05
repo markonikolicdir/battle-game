@@ -36,37 +36,9 @@ class BattleLogRepository extends ServiceEntityRepository
             ->setParameter('game', $gameId)
             ->leftJoin('b.attacker', 'a')
             ->leftJoin('b.enemy', 'e')
-            ->select('a.name as attacker, e.name as enemy, b.attacker_units', 'b.enemy_units')
+            ->select('a.name as attacker, e.name as enemy, b.attackerUnits', 'b.enemyUnits')
             ->getQuery()
             ->getResult();
     }
 
-    // /**
-    //  * @return BattleLog[] Returns an array of BattleLog objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?BattleLog
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

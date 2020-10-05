@@ -9,8 +9,12 @@
       <button type="button" class="btn btn-secondary" @click.prevent="autorun()">Autorun</button>
     </div>
     <div class="row">
+      <div class="row">
+        <p>Nuber of Turns: {{turns}}</p>
+        <p>Message: {{message}}</p>
+      </div>
       <div class="col-5 offset-2">
-        <h3 class="border-bottom">List of armies</h3>
+        <h3 class="border-bottom">Armies with their points</h3>
         <table class="table table-striped">
           <thead>
           <tr>
@@ -31,22 +35,22 @@
         </table>
       </div>
       <div class="col-5">
-        <h3 class="border-bottom">List of battles</h3>
+        <h3 class="border-bottom">Battle log before every turn</h3>
         <table class="table table-striped">
           <thead>
           <tr>
             <th>Attacker</th>
+            <th>Units</th>
             <th>Enemy</th>
-            <th>Strategy</th>
-            <th>Defeated</th>
+            <th>Units</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="battle in battles">
-            <td>{{ battle.name }}</td>
-            <td>{{ battle.units }}</td>
-            <td>{{ battle.strategy }}</td>
-            <td>{{ battle.defeated }}</td>
+            <td>{{ battle.attacker }}</td>
+            <td>{{ battle.attackerUnits }}</td>
+            <td>{{ battle.enemy }}</td>
+            <td>{{ battle.enemyUnits }}</td>
           </tr>
           </tbody>
         </table>
@@ -64,7 +68,9 @@ export default {
     return {
       id: null,
       armies: [],
-      battles: []
+      battles: [],
+      turns: 0,
+      message: ''
     }
   },
   computed: {
@@ -79,24 +85,24 @@ export default {
       axios.get(`/games/${this.id}/turn`)
           .then((response) => {
             console.log(response)
-            // this.armies.push(response.data)
 
-            // this.army.name = null
-            // this.army.units = 0
-            // this.army.strategy = 'Random'
-            // this.army.defeated = 0
+            this.turns = response.data.turns
+            this.message = response.data.message
+
+            this.listArmies()
+            this.listBattles()
           })
     },
     autorun(){
       axios.get(`/games/${this.id}/autorun`)
           .then((response) => {
             console.log(response)
-            // this.armies.push(response.data)
 
-            // this.army.name = null
-            // this.army.units = 0
-            // this.army.strategy = 'Random'
-            // this.army.defeated = 0
+            this.turns = response.data.turns
+            this.message = response.data.message
+
+            this.listArmies()
+            this.listBattles()
           })
     },
     listArmies(){
@@ -108,7 +114,7 @@ export default {
     listBattles(){
       axios.get(`/games/${this.id}/battles`)
           .then((response) => {
-            this.armies = response.data
+            this.battles = response.data
           })
     },
   }
