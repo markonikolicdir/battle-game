@@ -2,11 +2,12 @@
 * Docker
 * Composer
 * Yarn
+* PHP >=7.2.5
 
 ### Procedure
 Run every command so application can start
 #### Backend
-`docker-compose -d`
+`docker-compose up -d`
 
 `composer install`
 
